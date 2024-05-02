@@ -1,0 +1,13 @@
+[package]
+name = "async_ruby_rust"
+authors = ["Anthony D"]
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rutie = { version = "0.8.4", features = ["no-link"] }
+tokio = { version = "1", features = ["full"] }
+
+[lib]
+name = "async_ruby_rust"
+crate-type = ["dylib"]
