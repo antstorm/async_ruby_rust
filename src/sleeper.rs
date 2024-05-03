@@ -1,4 +1,4 @@
-use crate::async_runtime::{AsyncRuntime, Callback, Command};
+use crate::async_runtime::{AsyncRuntime, Callback};
 use std::{thread, time};
 
 pub fn sleep_sync(runtime: &AsyncRuntime, time: u64) {
@@ -22,7 +22,7 @@ pub fn sleep_async<F>(runtime: &AsyncRuntime, time: u64, callback: F) where F: F
 
     let callback: Callback = Box::new(move || callback());
 
-    tx.send(Command::RunCallback(callback)).expect("Unable to send a callback");
+    tx.send(Some(callback)).expect("Unable to send a callback");
     println!("[RUST] Awake from async sleep");
   });
 }
