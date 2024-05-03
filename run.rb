@@ -12,5 +12,12 @@ end
 async = AsyncRubyRust.init
 Thread.new { async.run_callback_loop }
 
-async.sleep(5_000);
+queue = Queue.new
 
+puts '[RUBY] Starting async sleep'
+async.sleep(3_000) do
+  puts '[RUBY] Async sleep finished'
+  queue.push(nil)
+end
+
+queue.pop

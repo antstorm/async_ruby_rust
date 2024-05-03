@@ -10,7 +10,7 @@ pub enum Command {
 }
 
 pub struct AsyncRuntime {
-    pub runtime: Runtime,
+    pub tokio: Runtime,
     pub callback_tx: Sender<Command>,
     callback_rx: Receiver<Command>,
 }
@@ -26,7 +26,7 @@ impl AsyncRuntime {
                 .build()
                 .expect("Unable to start a runtime");
 
-        AsyncRuntime { runtime, callback_tx: tx, callback_rx: rx }
+        AsyncRuntime { tokio: runtime, callback_tx: tx, callback_rx: rx }
     }
 
     // Call this from a Ruby thread

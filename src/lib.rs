@@ -33,10 +33,18 @@ methods!(
     }
 
     fn sleep(input: Integer) -> NilClass {
-        let duration = input.map_err(VM::raise_ex).unwrap().to_u64();
         let runtime = _rtself.get_data(&*ASYNC_RUNTIME_WRAPPER);
+        let duration = input.map_err(VM::raise_ex).unwrap().to_u64();
 
-        sleeper::sleep(&runtime.runtime, duration);
+        if !VM::is_block_given() {
+            sleeper::sleep_sync(&runtime, duration);
+            return NilClass::new();
+        }
+
+        let ruby_callback = VM::block_proc();
+        let callback = move || { ruby_callback.call(&[]); };
+
+        sleeper::sleep_async(runtime, duration, callback);
 
         NilClass::new()
     }
